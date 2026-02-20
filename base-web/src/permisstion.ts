@@ -3,12 +3,7 @@ import { initGlobalState } from "qiankun";
 
 const actions = initGlobalState({
   user: "", // 初始状态
-  token: "",
-});
-
-// 监听状态变化
-actions.onGlobalStateChange((state, prev) => {
-  console.log("主应用状态变化", state, prev);
+  userId: "",
 });
 
 async function getAccessToken() {
