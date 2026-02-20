@@ -3,6 +3,7 @@ import './style.css'
 import App from './App.vue'
 import { registerMicroApps, start } from 'qiankun';
 import router from './router';
+import './permisstion'
 
 registerMicroApps([
     {
@@ -10,13 +11,14 @@ registerMicroApps([
         entry: '//localhost:8080', // 子应用的地址
         container: '#sub-container', // 子应用挂载的节点
         activeRule: '#/vue-webpack', // 子应用的路由入口
+        props: {}, // 子应用接受的变量
     },
-    {
-        name: 'vue-vite',
-        entry: '//localhost:8081',
-        container: '#sub-container',
-        activeRule: '#/vue-vite',
-    },
+    // {
+    //     name: 'vue-vite',
+    //     entry: '//localhost:8081',
+    //     container: '#sub-container',
+    //     activeRule: '#/vue-vite',
+    // },
 ]);
 // 启动 qiankun
 start();

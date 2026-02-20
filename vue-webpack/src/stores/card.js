@@ -58,17 +58,14 @@ function loadScript(url) {
 }
 
 function loadStyle(url) {
-  console.log("Loading CSS:", url);
   return new Promise((resolve, reject) => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = url;
     link.onload = () => {
-      console.log("CSS loaded:", url);
       resolve();
     };
     link.onerror = (err) => {
-      console.error("CSS load failed:", url, err);
       reject(err);
     };
     document.head.appendChild(link);

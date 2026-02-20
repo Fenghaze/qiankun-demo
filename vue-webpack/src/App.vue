@@ -8,12 +8,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  methods: {
-    navigateToAbout() {
-      this.$router.push('/vue-webpack/about');
-    },
-  },
-};
+<script setup>
+
 </script>

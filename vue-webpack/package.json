@@ -11,6 +11,7 @@
     "core-js": "^3.8.3",
     "element-plus": "^2.13.2",
     "pinia": "^3.0.4",
+    "qiankun": "^2.10.16",
     "vue": "^3.2.13",
     "vue-grid-layout-v3": "^3.1.2",
     "vue-router": "^5.0.2"
