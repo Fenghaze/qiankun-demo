@@ -12,6 +12,32 @@ const cardEntries = {
   "list-card": "./src/cards/list-card/index.js",
 };
 
+const es6Config = {
+  output: isDevServer
+    ? undefined
+    : {
+        filename: "[name]/index.js", // 输出到对应卡片目录下，例如 user-info/index.js
+        libraryTarget: "module", // 输出 ES 模块
+        module: true, // 启用模块输出
+        chunkFormat: "module",
+      },
+  experiments: {
+    outputModule: true, // 必须开启
+  },
+};
+
+const umdConfig = {
+  output: isDevServer
+    ? undefined
+    : {
+        filename: "[name]/index.js", // 输出到对应卡片目录下，例如 user-info/index.js
+        library: "Card-[name]", // UMD 模块名称
+        libraryTarget: "umd", // 打包为 UMD
+        umdNamedDefine: true,
+        globalObject: "this",
+      },
+};
+
 module.exports = defineConfig({
   publicPath: "/static/market/cards/", // 构建后资源的基础路径
   devServer: {
@@ -29,20 +55,12 @@ module.exports = defineConfig({
   // webpack配置
   configureWebpack: {
     entry: cardEntries, // 多入口
-    output: isDevServer
-      ? undefined
-      : {
-          filename: "[name]/index.js", // 输出到对应卡片目录下，例如 user-info/index.js
-          library: "Card-[name]", // UMD 模块名称
-          libraryTarget: "umd", // 打包为 UMD
-          umdNamedDefine: true,
-          globalObject: "this",
-        },
     optimization: isDevServer
       ? {}
       : {
           splitChunks: false, // 不需要代码分割，保持每个卡片独立
         },
+    ...es6Config,
   },
   chainWebpack(config) {
     if (!isDevServer) {
@@ -66,10 +84,6 @@ module.exports = defineConfig({
     }
   },
   css: {
-    extract: isDevServer
-      ? false
-      : {
-          filename: "[name]/style.css", // 将 CSS 提取到单独文件，卡片目录下
-        },
+    extract: false,
   },
 });

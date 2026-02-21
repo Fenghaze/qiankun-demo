@@ -52,7 +52,7 @@
                 删除
               </el-button>
             </div>
-            <CardWrapper :card-id="item.type" :card-config="item.config" />
+            <CardWrapperES6 :card-id="item.type" :card-config="item.config" />
           </div>
         </grid-item>
       </grid-layout>
@@ -65,7 +65,7 @@ import { computed, onMounted } from "vue";
 import { GridLayout, GridItem } from "vue-grid-layout-v3";
 import { useCardStore } from "@/stores/card";
 import { useLayoutStore } from "@/stores/layout";
-import CardWrapper from "@/components/CardWrapper.vue";
+import CardWrapperES6 from "@/components/CardWrapperES6.vue";
 import { ElMessage } from "element-plus";
 
 export default {
@@ -73,7 +73,7 @@ export default {
   components: {
     GridLayout,
     GridItem,
-    CardWrapper,
+    CardWrapperES6,
   },
   setup() {
     const cardStore = useCardStore();

@@ -9,7 +9,6 @@ const mockFetchCardCatalog = () => {
         name: "用户信息",
         icon: "👤",
         entry: "/static/market/cards/user-info/index.js",
-        css: "/static/market/cards/user-info/style.css",
         width: 4,
         minWidth: 2,
         maxWidth: 8,
@@ -23,7 +22,6 @@ const mockFetchCardCatalog = () => {
         name: "待办列表",
         icon: "📋",
         entry: "/static/market/cards/list-card/index.js",
-        css: "/static/market/cards/list-card/style.css",
         width: 4,
         minWidth: 2,
         maxWidth: 8,
@@ -84,7 +82,24 @@ export const useCardStore = defineStore("card", {
       const res = await mockFetchCardCatalog();
       this.catalog = res.data;
     },
+    async loadUmdModule(cardMeta, cardId) {
+      // 使用script加载umd模块
+      const module = await loadScript(cardMeta.entry);
+      this.loadedModules.set(cardId, module);
+      this.errors.delete(cardId);
+      return module;
+    },
+    async loadES6Module(cardMeta, cardId) {
+      // 使用 import() 动态加载 ES 模块，跳过 Webpack 处理
+      const module = await import(/* webpackIgnore: true */ cardMeta.entry);
+      // ES 模块默认导出即为组件
+      const component = module.default || module;
+      this.loadedModules.set(cardId, component);
+      this.errors.delete(cardId);
+      return component;
+    },
     async loadCard(cardId) {
+      // 如果已加载，直接返回缓存
       if (this.loadedModules.has(cardId)) return this.loadedModules.get(cardId);
       if (this.loading.has(cardId)) {
         return new Promise((resolve) => {
@@ -103,13 +118,8 @@ export const useCardStore = defineStore("card", {
       this.loading.add(cardId);
 
       try {
-        if (cardMeta.css) {
-          await loadStyle(cardMeta.css);
-        }
-        const module = await loadScript(cardMeta.entry);
-        this.loadedModules.set(cardId, module);
-        this.errors.delete(cardId);
-        return module;
+        const component = await this.loadES6Module(cardMeta, cardId);
+        return component
       } catch (err) {
         this.errors.set(cardId, err);
         throw err;
