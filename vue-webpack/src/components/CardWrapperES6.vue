@@ -13,9 +13,6 @@ export default {
   },
   setup(props) {
     const cardStore = useCardStore();
-    const loading = ref(false);
-    const error = ref(null);
-    const cardComponent = ref(null);
 
     // 获取卡片元数据中的默认配置
     const meta = computed(() =>

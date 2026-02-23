@@ -74,7 +74,6 @@ export const useCardStore = defineStore("card", {
   state: () => ({
     catalog: [],
     loadedModules: new Map(),
-    loading: new Set(),
     errors: new Map(),
   }),
   actions: {
@@ -101,21 +100,9 @@ export const useCardStore = defineStore("card", {
     async loadCard(cardId) {
       // 如果已加载，直接返回缓存
       if (this.loadedModules.has(cardId)) return this.loadedModules.get(cardId);
-      if (this.loading.has(cardId)) {
-        return new Promise((resolve) => {
-          const unwatch = this.$subscribe((mutation, state) => {
-            if (state.loadedModules.has(cardId)) {
-              unwatch();
-              resolve(state.loadedModules.get(cardId));
-            }
-          });
-        });
-      }
 
       const cardMeta = this.catalog.find((c) => c.id === cardId);
       if (!cardMeta) throw new Error(`Card ${cardId} not found`);
-
-      this.loading.add(cardId);
 
       try {
         if (cardMeta.css) {
@@ -126,8 +113,6 @@ export const useCardStore = defineStore("card", {
       } catch (err) {
         this.errors.set(cardId, err);
         throw err;
-      } finally {
-        this.loading.delete(cardId);
       }
     },
   },
