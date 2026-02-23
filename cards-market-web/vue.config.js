@@ -1,6 +1,6 @@
 const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
-
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // 判断当前是否为开发服务器启动
 const isDevServer =
   process.env.NODE_ENV === "development" &&
@@ -60,7 +60,11 @@ module.exports = defineConfig({
       : {
           splitChunks: false, // 不需要代码分割，保持每个卡片独立
         },
-    ...es6Config,
+    ...umdConfig, // 生产环境使用 UMD 输出，开发环境保持默认
+    plugins: isDevServer ? [] : [new BundleAnalyzerPlugin()],
+    externals: isDevServer ? {} : {
+      "element-plus": "ElementPlus", // 运行时从全局获取 Element Plus
+    },
   },
   chainWebpack(config) {
     if (!isDevServer) {

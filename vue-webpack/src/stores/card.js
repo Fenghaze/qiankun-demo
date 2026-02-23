@@ -118,7 +118,10 @@ export const useCardStore = defineStore("card", {
       this.loading.add(cardId);
 
       try {
-        const component = await this.loadES6Module(cardMeta, cardId);
+        if (cardMeta.css) {
+          await loadStyle(cardMeta.css);
+        }
+        const component = await this.loadUmdModule(cardMeta, cardId);
         return component
       } catch (err) {
         this.errors.set(cardId, err);

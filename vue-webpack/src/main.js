@@ -16,6 +16,8 @@ const render = (props = {}) => {
   appInstance.use(pinia);
   appInstance.use(ElementPlus);
   appInstance.mount(container ? container.querySelector("#app") : "#app");
+  // 手动将 ElementPlus 挂载到全局，供子应用使用
+  window.ElementPlus = ElementPlus;
 };
 
 export async function bootstrap() {

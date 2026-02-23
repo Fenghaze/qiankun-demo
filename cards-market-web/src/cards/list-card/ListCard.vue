@@ -1,6 +1,6 @@
 <template>
     <div class="list-card">
-        <h3>{{ title }}</h3>
+        <el-button>{{ title }}</el-button>
         <ul>
             <li v-for="(item, index) in list" :key="index">
                 {{ item }}
@@ -11,7 +11,8 @@
 
 <script>
 import { defineComponent, ref } from 'vue';
-
+import { ElButton } from 'element-plus';
+import 'element-plus/es/components/button/style/css'; // 引入样式
 export default defineComponent({
     name: 'ListCard',
     props: {
@@ -21,6 +22,9 @@ export default defineComponent({
                 items: ['任务一', '任务二', '任务三'] // 默认数据
             })
         }
+    },
+    components: {
+        ElButton
     },
     setup(props) {
         const title = '待办列表';
