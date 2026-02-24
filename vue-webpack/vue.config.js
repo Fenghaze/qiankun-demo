@@ -21,5 +21,17 @@ module.exports = defineConfig({
       libraryTarget: "umd",
       chunkLoadingGlobal: `webpackJsonp_${name}`,
     },
+    resolve: {
+      alias: {
+        "@": require("path").resolve(__dirname, "src"),
+      },
+    },
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        implementation: require("sass"),
+      },
+    },
   },
 });
